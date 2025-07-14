@@ -1,0 +1,24 @@
+spring:
+  neo4j:
+    uri: bolt://localhost:7687
+    authentication:
+      username: neo4j
+      password: zhang123
+
+langchain4j:
+  community:
+    dashscope:
+      chat-model:
+        api-key: sk-87449b85433e430cb500a9da7dec46fd
+        model-name: qwen-max
+        temperature: 0.7
+        max-tokens: 4096
+  open-ai:
+    chat-model:
+      api-key: ${OPEN_AI_KEY}
+      base-url: https://api.deepseek.com/v1
+      model-name: deepseek-chat
+    streaming-chat-model:
+      api-key: ${OPEN_AI_KEY}
+      base-url: https://api.deepseek.com/v1
+      model-name: deepseek-chat
