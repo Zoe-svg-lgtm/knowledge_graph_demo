@@ -1,6 +1,7 @@
 package com.bjfu.knowledge_graph.service.impl;
 
 import com.bjfu.knowledge_graph.bean.relationships.BaseRelationship;
+import com.bjfu.knowledge_graph.repository.RelationshipRepository;
 import com.bjfu.knowledge_graph.service.RelationshipService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class RelationshipServiceImpl implements RelationshipService {
 
     @Autowired
     private Neo4jTemplate neo4jTemplate;
+    @Autowired
+    private RelationshipRepository relationshipRepository;
 
     // 关系类型映射
     private static final Map<Class<?>, String> RELATIONSHIP_TYPE_MAP = new HashMap<>();
@@ -40,7 +43,7 @@ public class RelationshipServiceImpl implements RelationshipService {
 
         // 扫描指定包
         Set<BeanDefinition> candidateComponents =
-                scanner.findCandidateComponents("com.bjfu.knowledge_graph.domain.relationships");
+                scanner.findCandidateComponents("com.bjfu.knowledge_graph.bean.relationships");
 
         for (BeanDefinition beanDefinition : candidateComponents) {
             try {
@@ -150,17 +153,17 @@ public class RelationshipServiceImpl implements RelationshipService {
                 return "不支持的关系类型: " + relationshipClass.getSimpleName();
             }
 
-            String cypher = String.format(
-                    "MATCH (start)-[r:%s]->(end) WHERE id(start) = $startId AND id(end) = $endId DELETE r RETURN count(r) as deletedCount",
-                    relationshipType
-            );
-
-            Map<String, Object> params = Map.of(
-                    "startId", startNodeId,
-                    "endId", endNodeId
-            );
-
-            Integer deletedCount = neo4jTemplate.findOne(cypher, params, Integer.class).orElse(0);
+            int deletedCount = 0;
+            switch (relationshipType) {
+                case "CONTAINS_CONSTANT_RELATIONSHIP":
+                    deletedCount = relationshipRepository.deleteContainsConstantRelationship(startNodeId, endNodeId);
+                    break;
+                case "CONTAINS_QUANTITY_RELATIONSHIP":
+                    deletedCount = relationshipRepository.deleteContainsQuantityRelationship(startNodeId, endNodeId);
+                    break;
+                default:
+                    log.warn("不支持的关系类型: {}", relationshipType);
+            }
 
             if (deletedCount > 0) {
                 log.info("成功删除关系: {} -> {} ({})", startNodeId, endNodeId, relationshipType);

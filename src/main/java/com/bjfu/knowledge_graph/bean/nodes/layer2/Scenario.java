@@ -20,9 +20,6 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Scenario extends BaseNode {
 
-    @Id
-    @GeneratedValue
-    private Long id;
 
     @Property("scenarioName")
     private String scenarioName;

@@ -12,7 +12,7 @@ langchain4j:
         api-key: sk-87449b85433e430cb500a9da7dec46fd
         model-name: qwen-max
         temperature: 0.7
-        max-tokens: 4096
+        max-tokens: 8192
   open-ai:
     chat-model:
       api-key: ${OPEN_AI_KEY}

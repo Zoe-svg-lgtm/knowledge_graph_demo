@@ -131,23 +131,27 @@ public class KnowledgeGraphServiceImpl implements KnowledgeGraphService {
         // 删除公式的话要删除公式以及关联的物理量和常数关系
         try {
             // 删除关系
-            for (PhysicalQuantity quantity : formula.getQuantities()) {
-                relationshipService.deleteRelationship(formulaId, quantity.getId(), ContainsQuantityRelationship.class);
-                if (physicalQuantityRepository.hasIncomingRelationships(quantity.getSymbol())) {
-                    log.info("物理量 '{}' 仍被其他公式引用，跳过删除。", quantity.getName());
-                } else {
-                    physicalQuantityRepository.deleteById(quantity.getId());
-                    log.info("成功删除物理量: {}", quantity.getName());
+            if (!formula.getQuantities().isEmpty()) {
+                for (PhysicalQuantity quantity : formula.getQuantities()) {
+                    relationshipService.deleteRelationship(formulaId, quantity.getId(), ContainsQuantityRelationship.class);
+                    if (physicalQuantityRepository.hasIncomingRelationships(quantity.getSymbol())) {
+                        log.info("物理量 '{}' 仍被其他公式引用，跳过删除。", quantity.getName());
+                    } else {
+                        physicalQuantityRepository.deleteById(quantity.getId());
+                        log.info("成功删除物理量: {}", quantity.getName());
+                    }
                 }
             }
 
-            for (Constant constant : formula.getConstants()) {
-                relationshipService.deleteRelationship(formulaId, constant.getId(), ContainsConstantRelationship.class);
-                if (constantRepository.hasIncomingRelationships(constant.getSymbol())) {
-                    log.info("常数 '{}' 仍被其他公式引用，跳过删除。", constant.getName());
-                } else {
-                    constantRepository.deleteById(constant.getId());
-                    log.info("成功删除常数: {}", constant.getName());
+            if (!formula.getConstants().isEmpty()) {
+                for (Constant constant : formula.getConstants()) {
+                    relationshipService.deleteRelationship(formulaId, constant.getId(), ContainsConstantRelationship.class);
+                    if (constantRepository.hasIncomingRelationships(constant.getSymbol())) {
+                        log.info("常数 '{}' 仍被其他公式引用，跳过删除。", constant.getName());
+                    } else {
+                        constantRepository.deleteById(constant.getId());
+                        log.info("成功删除常数: {}", constant.getName());
+                    }
                 }
             }
             //删除公式
