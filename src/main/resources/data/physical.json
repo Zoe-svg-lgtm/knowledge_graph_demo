@@ -1,0 +1,564 @@
+{
+  "label": "Topic",
+  "name": "高中物理（力学）",
+  "properties": {},
+  "children": [
+    {
+      "label": "Concept",
+      "name": "力",
+      "properties": {},
+      "children": [
+        {
+          "label": "Concept",
+          "name": "力的概念",
+          "properties": {
+            "definition": "力是物体间的相互作用"
+          },
+          "children": [
+            {
+              "label": "Characteristic",
+              "name": "力的三要素",
+              "properties": {
+                "text": "大小、方向、作用点"
+              },
+              "children": []
+            },
+            {
+              "label": "Concept",
+              "name": "力的图示",
+              "properties": {
+                "definition": "用一条带箭头的线段形象地表示力的三要素"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Category",
+          "name": "常见的三种力",
+          "properties": {},
+          "children": [
+            {
+              "label": "Concept",
+              "name": "重力",
+              "properties": {},
+              "children": [
+                {
+                  "label": "Condition",
+                  "name": "产生原因",
+                  "properties": {
+                    "text": "由于地球吸引"
+                  },
+                  "children": []
+                },
+                {
+                  "label": "Formula",
+                  "name": "重力公式",
+                  "properties": {
+                    "expression": "G=mg"
+                  },
+                  "children": []
+                },
+                {
+                  "label": "Characteristic",
+                  "name": "方向",
+                  "properties": {
+                    "text": "竖直向下"
+                  },
+                  "children": []
+                },
+                {
+                  "label": "Concept",
+                  "name": "重心",
+                  "properties": {
+                    "definition": "重力的等效作用点，重心不一定在物体上"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "label": "Concept",
+              "name": "弹力",
+              "properties": {},
+              "children": [
+                {
+                  "label": "Condition",
+                  "name": "产生条件",
+                  "properties": {
+                    "text": "①物体间直接接触 ②接触面发生弹性形变"
+                  },
+                  "children": []
+                },
+                {
+                  "label": "Characteristic",
+                  "name": "方向",
+                  "properties": {
+                    "text": "与物体所受外力方向、物体形变方向相反"
+                  },
+                  "children": []
+                },
+                {
+                  "label": "Law",
+                  "name": "胡克定律",
+                  "properties": {},
+                  "children": [
+                    {
+                      "label": "Formula",
+                      "name": "胡克定律公式",
+                      "properties": {
+                        "expression": "F=kx"
+                      },
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "label": "Concept",
+              "name": "摩擦力",
+              "properties": {},
+              "children": [
+                {
+                  "label": "Concept",
+                  "name": "滑动摩擦力",
+                  "properties": {},
+                  "children": [
+                    {
+                      "label": "Condition",
+                      "name": "产生条件",
+                      "properties": {
+                        "text": "①接触面粗糙 ②接触处有挤压 ③相对滑动"
+                      },
+                      "children": []
+                    },
+                    {
+                      "label": "Characteristic",
+                      "name": "方向",
+                      "properties": {
+                        "text": "与接触面相切，跟物体的相对运动方向相反"
+                      },
+                      "children": []
+                    },
+                    {
+                      "label": "Formula",
+                      "name": "摩擦力计算公式",
+                      "properties": {
+                        "expression": "F=μFN"
+                      },
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "label": "Concept",
+                  "name": "静摩擦力",
+                  "properties": {},
+                  "children": [
+                    {
+                      "label": "Condition",
+                      "name": "产生条件",
+                      "properties": {
+                        "text": "①接触面粗糙 ②接触处有挤压 ③相对静止，但有相对运动趋势"
+                      },
+                      "children": []
+                    },
+                    {
+                      "label": "Characteristic",
+                      "name": "方向",
+                      "properties": {
+                        "text": "沿接触面，与物体相对运动趋势方向相反，与物体所受其他力的合力方向相反"
+                      },
+                      "children": []
+                    },
+                    {
+                      "label": "Characteristic",
+                      "name": "大小",
+                      "properties": {
+                        "text": "0 < F ≤ F_max"
+                      },
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Concept",
+          "name": "力的合成与分解",
+          "properties": {},
+          "children": [
+            {
+              "label": "Concept",
+              "name": "合力与分力",
+              "properties": {
+                "definition": "等效代替关系"
+              },
+              "children": []
+            },
+            {
+              "label": "Concept",
+              "name": "运算法则",
+              "properties": {
+                "text": "平行四边形定则，正交分解法"
+              },
+              "children": []
+            },
+            {
+              "label": "Characteristic",
+              "name": "合力范围",
+              "properties": {
+                "text": "|F₁-F₂| ≤ F ≤ |F₁+F₂|"
+              },
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Category",
+          "name": "受力分析",
+          "properties": {},
+          "children": [
+            {
+              "label": "Concept",
+              "name": "隔离法",
+              "properties": {},
+              "children": []
+            },
+            {
+              "label": "Concept",
+              "name": "整体法",
+              "properties": {},
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Concept",
+      "name": "直线运动",
+      "properties": {},
+      "children": [
+        {
+          "label": "Category",
+          "name": "基本概念",
+          "properties": {},
+          "children": [
+            { "label": "Concept", "name": "参考系、质点", "properties": {}, "children": [] },
+            { "label": "Concept", "name": "时间、时刻", "properties": {}, "children": [] },
+            { "label": "Concept", "name": "位移", "properties": {}, "children": [] },
+            { "label": "Concept", "name": "速度", "properties": {}, "children": [] },
+            { "label": "Concept", "name": "加速度", "properties": {}, "children": [] }
+          ]
+        },
+        {
+          "label": "Category",
+          "name": "基本运动形式",
+          "properties": {},
+          "children": [
+            {
+              "label": "Concept",
+              "name": "匀速直线运动",
+              "properties": {},
+              "children": [
+                { "label": "Formula", "name": "匀速直线运动速度公式", "properties": { "expression": "v=s/t" }, "children": [] },
+                { "label": "Formula", "name": "匀速直线运动位移公式", "properties": { "expression": "s=vt" }, "children": [] },
+                { "label": "Concept", "name": "v-t图像", "properties": {}, "children": [] },
+                { "label": "Concept", "name": "s-t图像", "properties": {}, "children": [] }
+              ]
+            },
+            {
+              "label": "Concept",
+              "name": "匀变速直线运动",
+              "properties": {},
+              "children": [
+                {
+                  "label": "Category",
+                  "name": "规律",
+                  "properties": {},
+                  "children": [
+                    { "label": "Formula", "name": "匀变速直线运动速度-时间关系", "properties": { "expression": "vₜ = v₀ + at" }, "children": [] },
+                    { "label": "Formula", "name": "匀变速直线运动位移-时间关系", "properties": { "expression": "s = v₀t + ½at²" }, "children": [] },
+                    { "label": "Formula", "name": "匀变速直线运动速度-位移关系", "properties": { "expression": "vₜ² - v₀² = 2as" }, "children": [] },
+                    { "label": "Formula", "name": "匀变速直线运动平均速度", "properties": { "expression": "v̄ = (v₀ + vₜ)/2 = v_t/2" }, "children": [] },
+                    { "label": "Concept", "name": "v-t图像", "properties": {}, "children": [] }
+                  ]
+                },
+                {
+                  "label": "Category",
+                  "name": "特例",
+                  "properties": {},
+                  "children": [
+                    {
+                      "label": "Example",
+                      "name": "自由落体",
+                      "properties": {},
+                      "children": [
+                        { "label": "Formula", "name": "自由落体速度", "properties": { "expression": "vₜ = gt" }, "children": [] },
+                        { "label": "Formula", "name": "自由落体高度", "properties": { "expression": "h = ½gt²" }, "children": [] },
+                        { "label": "Formula", "name": "自由落体速度-高度", "properties": { "expression": "vₜ² = 2gh" }, "children": [] }
+                      ]
+                    },
+                    {
+                      "label": "Example",
+                      "name": "竖直上抛",
+                      "properties": {},
+                      "children": [
+                        { "label": "Formula", "name": "竖直上抛速度", "properties": { "expression": "vₜ = v₀ - gt" }, "children": [] },
+                        { "label": "Formula", "name": "竖直上抛高度", "properties": { "expression": "h = v₀t - ½gt²" }, "children": [] },
+                        { "label": "Formula", "name": "竖直上抛速度-高度", "properties": { "expression": "vₜ² - v₀² = -2gh" }, "children": [] }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Topic",
+      "name": "牛顿运动定律",
+      "properties": {},
+      "children": [
+        {
+          "label": "Law",
+          "name": "牛顿第一定律",
+          "properties": {
+            "content": "一切物体总保持匀速直线运动状态或静止状态，直到有外力迫使它改变这种状态为止。"
+          },
+          "children": [
+            { "label": "Concept", "name": "惯性、惯性参考系", "properties": {}, "children": [] },
+            { "label": "Characteristic", "name": "质量与惯性", "properties": { "text": "质量是物体惯性大小的唯一量度" }, "children": [] }
+          ]
+        },
+        {
+          "label": "Law",
+          "name": "牛顿第二定律",
+          "properties": {},
+          "children": [
+            { "label": "Formula", "name": "牛顿第二定律", "properties": { "expression": "a = ΣF/m 或 ΣF=ma" }, "children": [] },
+            { "label": "Characteristic", "name": "特点", "properties": { "text": "矢量性:a的方向与ΣF的方向时刻相同; 瞬时性:a与ΣF同时产生、同时消失、同时变化; 独立性:作用在物体上的各个力各自产生一个加速度，物体的加速度是这些分加速度的矢量和。" }, "children": [] },
+            {
+              "label": "Category",
+              "name": "应用",
+              "properties": {},
+              "children": [
+                {
+                  "label": "Application",
+                  "name": "两类常见动力学题目",
+                  "properties": { "description": "a:已知受力情况，确定运动情况; b:已知运动情况，确定受力情况(牛顿运动定律是联结力和运动的桥梁)" },
+                  "children": []
+                },
+                {
+                  "label": "Application",
+                  "name": "超重、失重问题",
+                  "properties": { "description": "a:物体在竖直方向有向上的加速度，处于超重状态; 物体在竖直方向有向下的加速度，处于失重状态; b:物体处于超重、失重状态时，对支持物的压力或对悬绳的拉力大于或小于重力，但物体的重力大小没有变化。" },
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Law",
+          "name": "牛顿第三定律",
+          "properties": {
+            "content": "F = -F'"
+          },
+          "children": [
+            { "label": "Characteristic", "name": "特点", "properties": { "text": "F与F'大小相等方向相反、同性质、作用时间相同" }, "children": [] },
+            { "label": "Characteristic", "name": "关键", "properties": { "text": "作用力、反作用力与一对平衡力的区别" }, "children": [] }
+          ]
+        },
+        { "label": "Condition", "name": "适用范围", "properties": { "text": "宏观、低速、惯性参考系" }, "children": [] }
+      ]
+    },
+    {
+      "label": "Concept",
+      "name": "物体的平衡",
+      "properties": {},
+      "children": [
+        { "label": "Concept", "name": "共点力", "properties": { "definition": "几个力作用于一点,或其延长线相交于一点" }, "children": [] },
+        { "label": "Concept", "name": "平衡状态", "properties": { "definition": "静止或匀速直线运动状态" }, "children": [] },
+        { "label": "Condition", "name": "共点力作用下物体的平衡条件", "properties": { "text": "ΣF=0" }, "children": [] }
+      ]
+    },
+    {
+      "label": "Topic",
+      "name": "运动的合成与分解",
+      "properties": {},
+      "children": [
+        { "label": "Principle", "name": "运动的独立性原理", "properties": { "text": "作为运动合成与分解的依据" }, "children": [] },
+        {
+          "label": "Category",
+          "name": "实例",
+          "properties": {},
+          "children": [
+            { "label": "Example", "name": "小船过河", "properties": {}, "children": [] },
+            { "label": "Example", "name": "绳子末端速度的分解", "properties": {}, "children": [] }
+          ]
+        },
+        {
+          "label": "Concept",
+          "name": "曲线运动",
+          "properties": {},
+          "children": [
+            { "label": "Condition", "name": "条件", "properties": { "text": "F与v有一定夹角" }, "children": [] },
+            { "label": "Characteristic", "name": "特点", "properties": { "text": "速度方向沿轨迹的切线方向, a≠0" }, "children": [] },
+            {
+              "label": "Category",
+              "name": "实例",
+              "properties": {},
+              "children": [
+                {
+                  "label": "Example",
+                  "name": "平抛物体运动",
+                  "properties": {
+                    "description": "v₀沿水平方向, a=g匀变速"
+                  },
+                  "children": [
+                    {
+                      "label": "Concept",
+                      "name": "处理方法",
+                      "properties": { "text": "分解为水平方向的匀速直线运动和竖直方向的自由落体运动" },
+                      "children": []
+                    },
+                    {
+                      "label": "Category",
+                      "name": "公式",
+                      "properties": {},
+                      "children": [
+                        { "label": "Formula", "name": "平抛物体运动水平位移", "properties": { "expression": "x = v₀t" }, "children": [] },
+                        { "label": "Formula", "name": "平抛物体运动水平速度", "properties": { "expression": "vx = v₀" }, "children": [] },
+                        { "label": "Formula", "name": "平抛物体运动竖直位移", "properties": { "expression": "y = ½gt²" }, "children": [] },
+                        { "label": "Formula", "name": "平抛物体运动竖直速度", "properties": { "expression": "vy = gt" }, "children": [] }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "label": "Example",
+                  "name": "圆周运动",
+                  "properties": {
+                    "description": "变速运动"
+                  },
+                  "children": [
+                    {
+                      "label": "Category",
+                      "name": "基本物理量及关系",
+                      "properties": {},
+                      "children": [
+                        { "label": "Formula", "name": "圆周运动线速度与角速度", "properties": { "expression": "v = ωr" }, "children": [] },
+                        { "label": "Formula", "name": "圆周运动周期与频率", "properties": { "expression": "T = 1/f" }, "children": [] },
+                        { "label": "Formula", "name": "圆周运动角速度与周期", "properties": { "expression": "ω = 2π/T = 2πf" }, "children": [] },
+                        { "label": "Formula", "name": "圆周运动向心加速度", "properties": { "expression": "aₙ = v²/r = ω²r" }, "children": [] }
+                      ]
+                    },
+                    {
+                      "label": "Concept",
+                      "name": "向心力",
+                      "properties": {},
+                      "children": [
+                        { "label": "Formula", "name": "向心力表达式1", "properties": { "expression": "Fn = mv²/r" }, "children": [] },
+                        { "label": "Formula", "name": "向心力表达式2", "properties": { "expression": "Fn = mω²r" }, "children": [] }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Topic",
+      "name": "功和能",
+      "properties": {},
+      "children": [
+        {
+          "label": "Concept",
+          "name": "功",
+          "properties": {},
+          "children": [
+            { "label": "Formula", "name": "功定义式", "properties": { "expression": "W = Fs cosα" }, "children": [] },
+            {
+              "label": "Concept",
+              "name": "功率",
+              "properties": {
+                "definition": "P = W/t"
+              },
+              "children": [
+                { "label": "Formula", "name": "平均功率", "properties": { "expression": "P = Fv̄" }, "children": [] },
+                { "label": "Formula", "name": "瞬时功率", "properties": { "expression": "P = Fvₜ" }, "children": [] }
+              ]
+            }
+          ]
+        },
+        {
+          "label": "Concept",
+          "name": "能",
+          "properties": {},
+          "children": [
+            { "label": "Formula", "name": "动能", "properties": { "expression": "Ek = ½mv²" }, "children": [] },
+            {
+              "label": "Concept",
+              "name": "势能",
+              "properties": {},
+              "children": [
+                { "label": "Formula", "name": "重力势能", "properties": { "expression": "Ep = mgh" }, "children": [] },
+                { "label": "Formula", "name": "弹性势能", "properties": { "expression": "Ep = ½kx²" }, "children": [] }
+              ]
+            },
+            { "label": "Formula", "name": "机械能", "properties": { "expression": "E = Ek + Ep" }, "children": [] }
+          ]
+        },
+        { "label": "Principle", "name": "功能原理", "properties": { "text": "WF = ΔE" }, "children": [] },
+        { "label": "Theorem", "name": "动能定理", "properties": { "content": "W合 = ½mv₂² - ½mv₁²" }, "children": [] },
+        { "label": "Law", "name": "机械能守恒定律", "properties": { "content": "mgh₁ + ½mv₁² = mgh₂ + ½mv₂²" }, "children": [] }
+      ]
+    },
+    {
+      "label": "Topic",
+      "name": "动量",
+      "properties": {},
+      "children": [
+        {
+          "label": "Category",
+          "name": "概念",
+          "properties": {},
+          "children": [
+            { "label": "Concept", "name": "动量", "properties": { "description": "p=mv; 矢量, p与v同向; 状态量, v为瞬时速度" }, "children": [] },
+            { "label": "Concept", "name": "动量变化", "properties": { "description": "Δp=p'-p; Δp的方向与冲量的方向相同" }, "children": [] },
+            { "label": "Concept", "name": "冲量", "properties": { "description": "I=Ft; 矢量, 冲量的方向由力的方向决定; 过程量" }, "children": [] }
+          ]
+        },
+        {
+          "label": "Category",
+          "name": "规律",
+          "properties": {},
+          "children": [
+            { "label": "Theorem", "name": "动量定理", "properties": { "content": "I = p' - p; 矢量式，要选取正方向" }, "children": [] },
+            {
+              "label": "Law",
+              "name": "动量守恒定律",
+              "properties": {},
+              "children": [
+                { "label": "Condition", "name": "条件", "properties": { "text": "系统不受外力或所受外力之和为零" }, "children": [] },
+                { "label": "Characteristic", "name": "结论", "properties": { "text": "系统动量守恒, 即p=p'" }, "children": [] },
+                { "label": "Characteristic", "name": "注意", "properties": { "text": "系统性、矢量性、同时性、同系性" }, "children": [] },
+                { "label": "Application", "name": "应用", "properties": { "text": "反冲运动" }, "children": [] }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

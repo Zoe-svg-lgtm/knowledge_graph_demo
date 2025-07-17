@@ -2,6 +2,7 @@ package com.bjfu.knowledge_graph.service.impl;
 
 import com.bjfu.knowledge_graph.bean.nodes.layer1.BaseNode;
 import com.bjfu.knowledge_graph.service.NodeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.core.Neo4jTemplate;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class NodeServiceImpl implements NodeService {
 
     @Autowired
@@ -33,8 +35,20 @@ public class NodeServiceImpl implements NodeService {
             return existingNode.get().getId();
         }
 
-        T savedNode = neo4jTemplate.save(node);
-        return savedNode.getId();
+        try {
+            log.debug("开始保存节点: {}", node);
+            T savedNode = neo4jTemplate.save(node);
+            Long nodeId = savedNode.getId();
+            if (nodeId == null) {
+                log.error("保存节点 '{}' 失败，ID 为空: {}", node.getName(), savedNode);
+                throw new IllegalStateException("保存节点失败，ID 为空: " + node.getName());
+            }
+            log.info("保存节点后: savedNode = {}, ID = {}", savedNode, nodeId);
+            return nodeId;
+        } catch (Exception e) {
+            log.error("保存节点 '{}' 失败: {}", node.getName(), e.getMessage(), e);
+            throw new IllegalStateException("保存节点失败: " + e.getMessage(), e);
+        }
     }
 
     @Override

@@ -11,7 +11,8 @@
         <java.version>19</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>3.0.2</spring-boot.version>
+        <spring-boot.version>3.3.2</spring-boot.version>
+        <neo4j-java-driver.version>5.24.0</neo4j-java-driver.version>
     </properties>
     <dependencies>
         <dependency>
@@ -21,6 +22,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.neo4j.driver</groupId>
+            <artifactId>neo4j-java-driver</artifactId>
+            <version>${neo4j-java-driver.version}</version>
         </dependency>
         <dependency>
             <groupId>dev.langchain4j</groupId>
@@ -36,6 +42,11 @@
             <groupId>dev.langchain4j</groupId>
             <artifactId>langchain4j-community-dashscope-spring-boot-starter</artifactId>
             <version>1.0.0-beta3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dashscope-sdk-java</artifactId>
+            <version>2.20.6</version>
         </dependency>
 
         <dependency>

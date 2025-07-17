@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 public interface RelationshipRepository extends Neo4jRepository<BaseRelationship, Long> {
     
     @Query("MATCH (start)-[r:$relationshipType]->(end) " +
-           "WHERE id(start) = $startId AND id(end) = $endId " +
+           "WHERE elementId(start) = $startId AND elementId(end) = $endId " +
            "RETURN count(r) > 0")
     boolean existsRelationship(Long startId, Long endId, String relationshipType);
 
@@ -20,7 +20,7 @@ public interface RelationshipRepository extends Neo4jRepository<BaseRelationship
      * @return 删除的关系数量
      */
     @Query("MATCH (start)-[r:CONTAINS_CONSTANT_RELATIONSHIP]->(end) " +
-            "WHERE id(start) = $startId AND id(end) = $endId " +
+            "WHERE elementId(start) = $startId AND elementId(end) = $endId " +
             "DELETE r RETURN count(r) as deletedCount")
     Integer deleteContainsConstantRelationship(@Param("startId")Long startId, @Param("endId")Long endId);
 
@@ -31,7 +31,7 @@ public interface RelationshipRepository extends Neo4jRepository<BaseRelationship
      * @return 删除的关系数量
      */
     @Query("MATCH (start)-[r:CONTAINS_QUANTITY_RELATIONSHIP]->(end) " +
-            "WHERE id(start) = $startId AND id(end) = $endId " +
+            "WHERE elementId(start) = $startId AND elementId(end) = $endId " +
             "DELETE r RETURN count(r) as deletedCount")
     Integer deleteContainsQuantityRelationship(@Param("startId")Long startId, @Param("endId")Long endId);
 

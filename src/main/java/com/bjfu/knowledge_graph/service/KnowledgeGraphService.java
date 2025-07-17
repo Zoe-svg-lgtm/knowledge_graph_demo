@@ -33,4 +33,6 @@ public interface KnowledgeGraphService {
      */
     FormulaVO getFormulaById(Long formulaId);
 
+    public void initFormulas();
+
 }

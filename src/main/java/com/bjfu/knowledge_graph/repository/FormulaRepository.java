@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+
 public interface FormulaRepository extends Neo4jRepository<Formula, Long> {
     /**
      * 根据公式名称查找公式
@@ -30,7 +30,7 @@ public interface FormulaRepository extends Neo4jRepository<Formula, Long> {
      * @return 包含该物理量的公式列表
      */
     @Query("MATCH (f:Formula)-[:CONTAINS_QUANTITY_RELATIONSHIP]->(q:PhysicalQuantity) " +
-            "WHERE id(q) = $quantityId " +
+            "WHERE elementId(q) = $quantityId " +
             "WITH f " +
             // 匹配并收集与 f 相关的 PhysicalQuantity
             "MATCH (f)-[r1:CONTAINS_QUANTITY_RELATIONSHIP]->(quantities:PhysicalQuantity) " +

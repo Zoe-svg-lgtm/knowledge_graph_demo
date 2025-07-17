@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -55,7 +56,7 @@ public class KnowledgeGraphServiceImpl implements KnowledgeGraphService {
     public Formula addFormula(FormulaDTO formulaDTO) {
 
         log.info("开始分析公式: {}", formulaDTO.getFormula());
-        String analysisResult = formulaAnalysisService.analyzeFormula(formulaDTO.getFormula());
+        String analysisResult = formulaAnalysisService.analyzeFormula(formulaDTO.getFormula(), formulaDTO.getContext());
         log.info("从LLM获取的原始分析结果: \n---\n{}\n---", analysisResult);
         if (analysisResult.contains("{") && analysisResult.contains("}")) {
             analysisResult = analysisResult.substring(analysisResult.indexOf('{'), analysisResult.lastIndexOf('}') + 1);
@@ -186,20 +187,66 @@ public class KnowledgeGraphServiceImpl implements KnowledgeGraphService {
         return null;
     }
 
+    /**
+     * 将图谱中没有分析的公式进行分析
+     */
+    @Override
+    @Transactional
+    public void initFormulas() {
+        // 获取所有未分析的公式
+        List<Formula> formulas = formulaRepository.findAll().stream()
+                .filter(formula -> formula.getQuantities().isEmpty() && formula.getQuantities().isEmpty())
+                .collect(Collectors.toList());
+
+        if (formulas.isEmpty()) {
+            log.info("没有需要分析的公式");
+            return;
+        }
+        log.info("开始分析 {} 个未分析的公式", formulas.size());
+        for (Formula formula : formulas) {
+            try {
+                log.info("分析公式: {}", formula.getName());
+                String analysisResult = formulaAnalysisService.analyzeFormula(formula.getExpression(), formula.getName());
+                log.info("从LLM获取的原始分析结果: \n---\n{}\n---", analysisResult);
+
+                if (analysisResult.contains("{") && analysisResult.contains("}")) {
+                    analysisResult = analysisResult.substring(analysisResult.indexOf('{'), analysisResult.lastIndexOf('}') + 1);
+                }
+
+                FormulaVO resultVO = objectMapper.readValue(analysisResult, FormulaVO.class);
+
+                // 创建或获取物理量节点
+                Set<PhysicalQuantity> quantities = resultVO.getQuantities().stream()
+                        .map(this::getOrCreatePhysicalQuantity)
+                        .collect(Collectors.toSet());
+
+                // 创建或获取常数节点
+                Set<Constant> constants = resultVO.getConstants().stream()
+                        .map(this::getOrCreateConstant)
+                        .collect(Collectors.toSet());
+
+                // 创建公式与物理量、常数的关系
+                createFormulaRelationships(formula, quantities, constants);
+
+            } catch (Exception e) {
+                log.error("分析公式 '{}' 失败: {}", formula.getName(), e.getMessage(), e);
+            }
+        }
+
+    }
 
     /**
      * 获取或创建物理量
-     * 逻辑：先按唯一标识（这里是符号Symbol）查找，如果找到就返回，找不到就用NodeService创建。
      */
     private PhysicalQuantity getOrCreatePhysicalQuantity(PhysicalQuantity quantityInfo) {
-        // 优先使用Repository的查询方法，因为它更具体、类型安全
         return physicalQuantityRepository.findBySymbol(quantityInfo.getSymbol())
                 .orElseGet(() -> {
-                    // 如果不存在，使用 NodeService 创建新节点
-                    log.info("物理量 '{}' 不存在, 创建新节点.", quantityInfo.getName());
-                    Long nodeId = nodeService.createNode(quantityInfo, PhysicalQuantity.class);
-                    quantityInfo.setId(nodeId);
-                    return quantityInfo;
+                    // 如果找不到，则创建并保存新节点
+                    log.info("物理量 '{}' (Symbol: {}) 不存在, 开始创建新节点.", quantityInfo.getName(), quantityInfo.getSymbol());
+                    // 使用 repository.save()，它会返回带有ID的已保存实体
+                    PhysicalQuantity savedQuantity = physicalQuantityRepository.save(quantityInfo);
+                    log.info("成功创建物理量 '{}', 数据库ID: {}", savedQuantity.getName(), savedQuantity.getId());
+                    return savedQuantity;
                 });
     }
 
@@ -209,10 +256,11 @@ public class KnowledgeGraphServiceImpl implements KnowledgeGraphService {
     private Constant getOrCreateConstant(Constant constantInfo) {
         return constantRepository.findBySymbol(constantInfo.getSymbol())
                 .orElseGet(() -> {
-                    log.info("常数 '{}' 不存在, 创建新节点.", constantInfo.getName());
-                    Long nodeId = nodeService.createNode(constantInfo, Constant.class);
-                    constantInfo.setId(nodeId);
-                    return constantInfo;
+                    log.info("常数 '{}' (Symbol: {}) 不存在, 创建新节点.", constantInfo.getName(), constantInfo.getSymbol());
+                    // 使用 repository.save()，它会返回带有ID的已保存实体
+                    Constant savedConstant = constantRepository.save(constantInfo);
+                    log.info("成功创建常数 '{}', 数据库ID: {}", savedConstant.getName(), savedConstant.getId());
+                    return savedConstant;
                 });
     }
 
@@ -220,8 +268,16 @@ public class KnowledgeGraphServiceImpl implements KnowledgeGraphService {
      * 创建公式与物理量、常数的关系
      */
     private void createFormulaRelationships(Formula formula, Set<PhysicalQuantity> quantities, Set<Constant> constants) {
+        if(formula.getId() == null){
+            log.info("公式{}不存在或获取不到id", formula.getName());
+            throw new IllegalStateException("无法获取公式{}节点的ID，操作中止。");
+        }
         // 创建公式与物理量的关系
         for (PhysicalQuantity quantity : quantities) {
+            if(quantity.getId() == null){
+                log.info("物理量{}不存在或获取不到id", quantity.getName());
+                throw new IllegalStateException("无法获取物理量{}节点的ID，操作中止。");
+            }
             relationshipService.createRelationship(
                     formula.getId(),
                     quantity.getId(),
@@ -231,6 +287,10 @@ public class KnowledgeGraphServiceImpl implements KnowledgeGraphService {
 
         // 创建公式与常数的关系
         for (Constant constant : constants) {
+            if(constant.getId() == null){
+                log.info("常数{}不存在或获取不到id", constant.getName());
+                throw new IllegalStateException("无法获取常数{}节点的ID，操作中止。");
+            }
             relationshipService.createRelationship(
                     formula.getId(),
                     constant.getId(),

@@ -48,8 +48,8 @@ public class AiConfig {
         4. 准确判断物理量是否为矢量
         5. 单位使用标准的SI单位
         """)
-        @UserMessage("请分析以下高中物理公式：{{formula}}")
-        String analyzeFormula(@V("formula") String formula);
+        @UserMessage("请分析以下高中物理公式：{{formula}},以及关于公式的相关描述: {{description}}")
+        String analyzeFormula(@V("formula") String formula,@V("description") String description);
     }
     @Bean
      public FormulaAnalysisService formulaAnalysisService(ChatLanguageModel qwenChatModel) {
