@@ -342,7 +342,7 @@
           "name": "牛顿第二定律",
           "properties": {},
           "children": [
-            { "label": "Formula", "name": "牛顿第二定律", "properties": { "expression": "a = ΣF/m 或 ΣF=ma" }, "children": [] },
+            { "label": "Formula", "name": "牛顿第二定律", "properties": { "expression": "ΣF=ma" }, "children": [] },
             { "label": "Characteristic", "name": "特点", "properties": { "text": "矢量性:a的方向与ΣF的方向时刻相同; 瞬时性:a与ΣF同时产生、同时消失、同时变化; 独立性:作用在物体上的各个力各自产生一个加速度，物体的加速度是这些分加速度的矢量和。" }, "children": [] },
             {
               "label": "Category",

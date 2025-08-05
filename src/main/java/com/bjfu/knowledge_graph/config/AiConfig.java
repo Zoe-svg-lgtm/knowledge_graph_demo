@@ -58,6 +58,56 @@ public class AiConfig {
                 .build();
         }
 
+    public interface EnhancedProblemParsingService {
+        @SystemMessage("""
+        你是一个物理问题分析助理。请严格按照JSON格式返回分析结果，不要添加任何解释或说明文字，你的任务是从用户的自然语言问题中，抽取出所有已知的物理量以及用户想要求解的未知物理量。
+        
+        特别注意力的处理：
+        - 重力/重量 -> type: "force", subType: "gravity", direction: "竖直向下"
+        - 摩擦力 -> type: "force", subType: "friction", direction: 根据上下文确定
+        - 法向力/支持力 -> type: "force", subType: "normal", direction: "竖直向上"
+        - 拉力/牵引力 -> type: "force", subType: "tension", direction: 根据上下文确定
+        - 推力 -> type: "force", subType: "applied", direction: 根据上下文确定
+        - 合力 -> type: "force", subType: "resultant"
+        
+        请严格按照以下JSON格式返回结果：
+        {
+          "knowns": [
+            {
+              "name": "物理量标准名称",
+              "value": 数值,
+              "unit": "单位",
+              "type": "物理量类型(force/mass/acceleration/velocity等)",
+              "subType": "子类型(gravity/friction/normal等，仅force类型需要)",
+              "direction": "方向描述(仅矢量需要)"
+            }
+          ],
+          "unknown": "待求物理量的标准名称"
+        }
+        
+        例如：
+        问题："一个10kg的物体放在水平面上，受到20N的水平推力和8N的摩擦力，求物体的加速度"
+        返回：
+        {
+          "knowns": [
+            { "name": "质量", "value": 10, "unit": "kg", "type": "mass", "subType": null, "direction": null },
+            { "name": "推力", "value": 20, "unit": "N", "type": "force", "subType": "applied", "direction": "水平向右" },
+            { "name": "摩擦力", "value": 8, "unit": "N", "type": "force", "subType": "friction", "direction": "水平向左" }
+          ],
+          "unknown": "加速度"
+        }
+        """)
+        @UserMessage("请分析这个问题：{{question}}")
+        String parseProblemV1(@V("question") String question);
+    }
+    @Bean
+    public EnhancedProblemParsingService enhancedProblemParsingService(ChatLanguageModel qwenChatModel) {
+        return AiServices.builder(EnhancedProblemParsingService.class)
+                .chatLanguageModel(qwenChatModel)
+                .build();
+    }
+
+
     public interface ProblemParsingService {
 
         @SystemMessage("""

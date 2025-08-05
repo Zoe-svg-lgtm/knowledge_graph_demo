@@ -178,8 +178,8 @@ public class KnowledgeGraphServiceImpl implements KnowledgeGraphService {
         if (formulaOpt.isPresent()) {
             Formula formula = formulaOpt.get();
             FormulaVO formulaVO = new FormulaVO();
-            formulaVO.setFormulaName(formula.getName());
-            formulaVO.setExpression(formula.getExpression());
+            formulaVO.setFormulaName(formula.getExpression());
+            formulaVO.setExpression(formula.getName());
             formulaVO.setQuantities(formula.getQuantities());
             formulaVO.setConstants(formula.getConstants());
             return formulaVO;
@@ -241,9 +241,7 @@ public class KnowledgeGraphServiceImpl implements KnowledgeGraphService {
     private PhysicalQuantity getOrCreatePhysicalQuantity(PhysicalQuantity quantityInfo) {
         return physicalQuantityRepository.findBySymbol(quantityInfo.getSymbol())
                 .orElseGet(() -> {
-                    // 如果找不到，则创建并保存新节点
                     log.info("物理量 '{}' (Symbol: {}) 不存在, 开始创建新节点.", quantityInfo.getName(), quantityInfo.getSymbol());
-                    // 使用 repository.save()，它会返回带有ID的已保存实体
                     PhysicalQuantity savedQuantity = physicalQuantityRepository.save(quantityInfo);
                     log.info("成功创建物理量 '{}', 数据库ID: {}", savedQuantity.getName(), savedQuantity.getId());
                     return savedQuantity;
@@ -312,8 +310,8 @@ public class KnowledgeGraphServiceImpl implements KnowledgeGraphService {
                 .map(formula -> {
                     FormulaVO formulaVO = new FormulaVO();
                     formulaVO.setId(formula.getId());
-                    formulaVO.setFormulaName(formula.getName());
-                    formulaVO.setExpression(formula.getExpression());
+                    formulaVO.setFormulaName(formula.getExpression());
+                    formulaVO.setExpression(formula.getName());
                     formulaVO.setQuantities(formula.getQuantities());
                     formulaVO.setConstants(formula.getConstants());
                     return formulaVO;

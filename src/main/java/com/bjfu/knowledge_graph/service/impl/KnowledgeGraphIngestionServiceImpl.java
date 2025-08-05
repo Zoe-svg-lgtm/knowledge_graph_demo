@@ -154,8 +154,8 @@ public class KnowledgeGraphIngestionServiceImpl implements KnowledgeGraphIngesti
 
             case "Formula":
                 Formula formula = formulaRepository.findByName(name).orElseGet(Formula::new);
-                formula.setName(props.get("expression"));
-                formula.setExpression(name);
+                formula.setName(name);
+                formula.setExpression(props.get("expression"));
                 return formulaRepository.save(formula);
 
             case "Principle":

@@ -30,7 +30,7 @@ public interface FormulaRepository extends Neo4jRepository<Formula, Long> {
      * @return 包含该物理量的公式列表
      */
     @Query("MATCH (f:Formula)-[:CONTAINS_QUANTITY_RELATIONSHIP]->(q:PhysicalQuantity) " +
-            "WHERE elementId(q) = $quantityId " +
+            "WHERE id(q) = $quantityId " +
             "WITH f " +
             // 匹配并收集与 f 相关的 PhysicalQuantity
             "MATCH (f)-[r1:CONTAINS_QUANTITY_RELATIONSHIP]->(quantities:PhysicalQuantity) " +

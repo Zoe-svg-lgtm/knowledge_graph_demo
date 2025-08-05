@@ -8,6 +8,7 @@ import com.bjfu.knowledge_graph.bean.solver.SolvingStep;
 import com.bjfu.knowledge_graph.bean.solver.steps.FindFormulaStep;
 import com.bjfu.knowledge_graph.repository.FormulaRepository;
 import com.bjfu.knowledge_graph.repository.PhysicalQuantityRepository;
+import com.bjfu.knowledge_graph.service.PhysicsSymbolMappingService;
 import lombok.extern.slf4j.Slf4j;
 import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
@@ -26,6 +27,9 @@ public class CalculationService {
     private FormulaRepository formulaRepository;
     @Autowired
     private PhysicalQuantityRepository quantityRepository;
+
+    @Autowired
+    private PhysicsSymbolMappingService symbolMappingService;
     // Symja表达式求值器 - 线程安全
     private final ExprEvaluator evaluator = new ExprEvaluator();
 
@@ -92,36 +96,81 @@ public class CalculationService {
      * @return 计算出的新值
      */
     private double calculateSingleStep(Formula formula, PhysicalQuantity targetQuantity, Map<String, Double> knownValues) {
-        // 1. 获取公式的数学表达式，例如 "F = m * a"
+        log.info("=== 开始单步计算 ===");
+        log.info("公式: {}", formula.getExpression());
+        log.info("目标变量: {} ({})", targetQuantity.getName(), targetQuantity.getSymbol());
+        log.info("当前已知值: {}", knownValues);
+
+        // 1. 获取公式的数学表达式
         String expressionStr = formula.getExpression();
 
-        // 2.【处理公式变形】这是最复杂的部分。我们需要将 "F = m * a" 变形为求解 targetQuantity 的形式。
-        String solvableExpression = adaptFormulaForTarget(expressionStr, targetQuantity.getSymbol());
+        // 2. 标准化物理符号
+        String normalizedExpression = symbolMappingService.normalizePhysicsFormula(expressionStr);
+        log.info("标准化表达式: {}", normalizedExpression);
 
-        // 3. 获取公式中的所有变量符号
+        // 3. 处理公式变形
+        String targetSymbol = symbolMappingService.normalizePhysicsFormula(targetQuantity.getSymbol());
+        String solvableExpression = adaptFormulaForTarget(normalizedExpression, targetSymbol);
+        log.info("求解表达式: {} = {}", targetSymbol, solvableExpression);
+
+        // 4. 获取公式中的所有变量符号并建立映射
         Set<String> variableSymbols = new HashSet<>();
-        formula.getQuantities().forEach(q -> variableSymbols.add(q.getSymbol()));
+        Map<String, String> symbolToIdMap = new HashMap<>(); // 符号到ID的映射
+        Map<String, String> idToSymbolMap = new HashMap<>(); // ID到符号的映射
 
-        // 4. 使用 exp4j 构建表达式
+        for (PhysicalQuantity pq : formula.getQuantities()) {
+            String originalSymbol = pq.getSymbol();
+            String standardSymbol = symbolMappingService.normalizePhysicsFormula(originalSymbol);
+            String quantityId = String.valueOf(pq.getId());
+
+            variableSymbols.add(standardSymbol);
+            symbolToIdMap.put(standardSymbol, quantityId);
+            idToSymbolMap.put(quantityId, standardSymbol);
+
+            log.debug("符号映射: {} -> {} (ID: {})", originalSymbol, standardSymbol, quantityId);
+        }
+
+        // 5. 构建表达式
         ExpressionBuilder builder = new ExpressionBuilder(solvableExpression)
                 .variables(variableSymbols);
-
-        // 5. 为表达式中的变量赋值
-        for (PhysicalQuantity pq : formula.getQuantities()) {
-            if (knownValues.containsKey(String.valueOf(pq.getId()))) {
-                builder.variable(pq.getSymbol());
-            }
-        }
         Expression expression = builder.build();
 
-        for (PhysicalQuantity pq : formula.getQuantities()) {
-            if (knownValues.containsKey(String.valueOf(pq.getId()))) {
-                expression.setVariable(pq.getSymbol(), knownValues.get(String.valueOf(pq.getId())));
+
+        // 为变量赋值
+        log.info("开始为变量赋值:");
+        int assignedCount = 0;
+
+        for (String symbol : variableSymbols) {
+            String quantityId = symbolToIdMap.get(symbol);
+
+            if (quantityId != null && knownValues.containsKey(quantityId)) {
+                double value = knownValues.get(quantityId);
+                expression.setVariable(symbol, value);
+                assignedCount++;
+                log.info("  {} = {} (来自ID: {})", symbol, value, quantityId);
+            } else {
+                log.warn("  {} = ??? (未找到值，ID: {})", symbol, quantityId);
             }
         }
 
-        // 6. 计算结果
-        return expression.evaluate();
+        // 计算结果
+        try {
+            double result = expression.evaluate();
+            log.info("计算成功: {} = {}", targetSymbol, result);
+            return result;
+        } catch (Exception e) {
+            log.error("表达式求值失败: {}", e.getMessage());
+            log.error("表达式: {}", solvableExpression);
+            log.error("变量值:");
+            for (String var : variableSymbols) {
+                try {
+                    log.error("  {} =", var);
+                } catch (Exception ex) {
+                    log.error("  {} = 未赋值", var);
+                }
+            }
+            throw new RuntimeException("计算表达式失败: " + solvableExpression, e);
+        }
     }
 
     /**

@@ -19,32 +19,46 @@ public class NodeServiceImpl implements NodeService {
     @Autowired
     private Neo4jTemplate neo4jTemplate;
 
-    /**
-     * 创建节点，如果同名节点已存在，则不进行任何操作并返回已存在节点的ID。
-     * 这是一个更安全的 "findOrCreate" 实现。
-     */
     @Override
     @Transactional
     public <T extends BaseNode> Long createNode(T node, Class<T> nodeClass) {
-        // 1. 检查节点是否已存在
-        Optional<T> existingNode = neo4jTemplate.findOne("MATCH (n) WHERE n.name = $name RETURN n",
+        // 1. 从 Class 对象获取节点标签
+        org.springframework.data.neo4j.core.schema.Node nodeAnnotation = nodeClass.getAnnotation(org.springframework.data.neo4j.core.schema.Node.class);
+        if (nodeAnnotation == null) {
+            throw new IllegalArgumentException("Class " + nodeClass.getName() + " is not a valid Neo4j @Node entity.");
+        }
+        // 如果@Node注解没有指定value，则默认使用类名作为标签
+        String label = nodeAnnotation.value().length > 0 ? nodeAnnotation.value()[0] : nodeClass.getSimpleName();
+
+        // 2. 构造正确的、带标签的查询语句
+        String cypherQuery = String.format("MATCH (n:`%s`) WHERE n.name = $name RETURN n", label);
+
+        // 3. 使用修正后的查询来检查节点是否存在
+        Optional<T> existingNode = neo4jTemplate.findOne(cypherQuery,
                 Map.of("name", node.getName()),
                 nodeClass);
 
         if (existingNode.isPresent()) {
+            log.info("节点 '{}' (标签: {}) 已存在，ID: {}", node.getName(), label, existingNode.get().getId());
             return existingNode.get().getId();
         }
 
+        // 4. 保存新节点
+        // 即使修复了查询，这里的 save 仍然是潜在的风险点。
+        // 更稳妥的方式是放弃这个通用方法，使用特定Repository。
         try {
-            log.debug("开始保存节点: {}", node);
-            T savedNode = neo4jTemplate.save(node);
-            Long nodeId = savedNode.getId();
-            if (nodeId == null) {
-                log.error("保存节点 '{}' 失败，ID 为空: {}", node.getName(), savedNode);
-                throw new IllegalStateException("保存节点失败，ID 为空: " + node.getName());
+            log.info("节点 '{}' (标签: {}) 不存在, 创建新节点.", node.getName(), label);
+            T savedNode = neo4jTemplate.save(node); // 尝试保存
+            if (savedNode == null || savedNode.getId() == null) {
+                // 这里可以做一个额外的查询来验证是否创建成功并获取ID，作为备用方案
+                log.error("neo4jTemplate.save()未能返回带ID的节点。尝试重新获取...");
+                // 重新查询一次，这次它肯定存在了
+                T freshlyFetchedNode = neo4jTemplate.findOne(cypherQuery, Map.of("name", node.getName()), nodeClass)
+                        .orElseThrow(() -> new IllegalStateException("节点创建失败，保存后仍无法找到: " + node.getName()));
+                return freshlyFetchedNode.getId();
             }
-            log.info("保存节点后: savedNode = {}, ID = {}", savedNode, nodeId);
-            return nodeId;
+            log.info("成功创建节点 '{}' (标签: {}), ID: {}", savedNode.getName(), label, savedNode.getId());
+            return savedNode.getId();
         } catch (Exception e) {
             log.error("保存节点 '{}' 失败: {}", node.getName(), e.getMessage(), e);
             throw new IllegalStateException("保存节点失败: " + e.getMessage(), e);
